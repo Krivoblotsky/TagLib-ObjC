@@ -27,4 +27,6 @@
 @property (nonatomic) NSString *genre;
 @property (nonatomic) NSData *albumArt;
 
+//Get track length
+- (NSNumber *)duration;
 @end

@@ -194,6 +194,12 @@ static inline TagLib::String TLStr(NSString *_string)
     }
 }
 
+- (NSNumber *)duration
+{
+    return [NSNumber numberWithUnsignedInt:_file.audioProperties()->length()];
+}
+
+
 - (void)dealloc
 {
     _path = nil;
