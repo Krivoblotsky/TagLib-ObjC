@@ -194,11 +194,27 @@ static inline TagLib::String TLStr(NSString *_string)
     }
 }
 
+#pragma mark - Audio Properties
+
 - (NSNumber *)duration
 {
     return [NSNumber numberWithUnsignedInt:_file.audioProperties()->length()];
 }
 
+- (NSNumber *)sampleRate
+{
+    return [NSNumber numberWithUnsignedInt:_file.audioProperties()->sampleRate()];
+}
+
+- (NSNumber *)bitRate
+{
+    return [NSNumber numberWithUnsignedInt:_file.audioProperties()->bitrate()];
+}
+
+- (NSNumber *)channels
+{
+    return [NSNumber numberWithUnsignedInt:_file.audioProperties()->channels()];
+}
 
 - (void)dealloc
 {
