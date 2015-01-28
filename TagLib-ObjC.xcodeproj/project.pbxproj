@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		0EDC97F21A7949360043BDBA /* UniversalLib */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0EDC97F51A7949360043BDBA /* Build configuration list for PBXAggregateTarget "UniversalLib" */;
+			buildPhases = (
+				0EDC97F61A7949560043BDBA /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UniversalLib;
+			productName = UniversalLib;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		45084A05159F479600264051 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45084706159F3A6600264051 /* Foundation.framework */; };
 		45084A0F159F47C700264051 /* apefile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45084717159F3B1700264051 /* apefile.cpp */; };
@@ -1451,7 +1465,7 @@
 			name = "taglib-tests";
 			productName = "taglib-tests";
 			productReference = 45084A83159F6B8C00264051 /* taglib-tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 		45313D3F15A10A3F0092354D /* taglib-objc-tests */ = {
 			isa = PBXNativeTarget;
@@ -1470,7 +1484,7 @@
 			name = "taglib-objc-tests";
 			productName = "taglib-objc-tests";
 			productReference = 45313D4015A10A3F0092354D /* taglib-objc-tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1479,6 +1493,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0430;
+				TargetAttributes = {
+					0EDC97F21A7949360043BDBA = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
 			};
 			buildConfigurationList = 450846FD159F3A6600264051 /* Build configuration list for PBXProject "TagLib-ObjC" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1496,6 +1515,7 @@
 				45084A6F159F48E400264051 /* taglib-objc */,
 				45084A82159F6B8C00264051 /* taglib-tests */,
 				45313D3F15A10A3F0092354D /* taglib-objc-tests */,
+				0EDC97F21A7949360043BDBA /* UniversalLib */,
 			);
 		};
 /* End PBXProject section */
@@ -1610,6 +1630,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0EDC97F61A7949560043BDBA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "UNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\nxcodebuild -target taglib-objc ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target taglib-objc -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\necho \"Binary : ${UNIVERSAL_OUTPUTFOLDER}\"\necho \"Headers: ${BUILD_DIR}/${CONFIGURATION}\"";
+		};
 		45084A81159F6B8C00264051 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1806,6 +1839,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0EDC97F31A7949360043BDBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0EDC97F41A7949360043BDBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		4508470E159F3A6600264051 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1996,6 +2043,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0EDC97F51A7949360043BDBA /* Build configuration list for PBXAggregateTarget "UniversalLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0EDC97F31A7949360043BDBA /* Debug */,
+				0EDC97F41A7949360043BDBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		450846FD159F3A6600264051 /* Build configuration list for PBXProject "TagLib-ObjC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
