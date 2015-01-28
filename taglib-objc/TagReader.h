@@ -11,7 +11,7 @@
 @interface TagReader : NSObject
 
 - (id)initWithFileAtPath:(NSString *)path;  //Designated initializer
-- (void)loadFileAtPath:(NSString *)path;
+- (BOOL)loadFileAtPath:(NSString *)path;
 
 - (BOOL)save;
 - (BOOL)doubleSave; //Some filetypes require being saved twice (unknown reasons), if saving with - save doesn't work, try -doubleSave. 
@@ -52,4 +52,5 @@
  * Returns the number of audio channels.
  */
 - (NSNumber *)channels;
+
 @end

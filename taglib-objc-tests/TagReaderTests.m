@@ -27,19 +27,29 @@
 #define TEST_GENRE_2 @"uTest!"
 
 @implementation TagReaderTests
-- (void)saveTagReaderWithName:(NSString *)name extension:(NSString *)ext doubleSave:(BOOL)doubleSave
+
+#pragma mark - Tools
+
+- (NSString *)copyFile:(NSString *)fileName fileExtension:(NSString *)extension
 {
-    NSString *originalPath = [[NSBundle bundleForClass:[self class]] pathForResource:name ofType:ext];
+    NSString *originalPath = [[NSBundle bundleForClass:[self class]] pathForResource:fileName ofType:extension];
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *destinationPath = [[documentsDirectory stringByAppendingPathComponent:name] stringByAppendingPathExtension:ext];
+    NSString *destinationPath = [[documentsDirectory stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:extension];
     
     [[NSFileManager defaultManager] removeItemAtPath:destinationPath error:nil];
     
     NSError *error = nil;
-    [[NSFileManager defaultManager] copyItemAtPath:originalPath toPath:destinationPath error:&error];
-    STAssertNil(error, @"Could not copy file from bundle");
+    if ([[NSFileManager defaultManager] copyItemAtPath:originalPath toPath:destinationPath error:&error]) {
+        return destinationPath;
+    }
     
-    NSString *filePath = destinationPath;
+    return nil;
+}
+
+- (void)saveTagReaderWithName:(NSString *)name extension:(NSString *)ext doubleSave:(BOOL)doubleSave
+{
+    NSString *filePath = [self copyFile:name fileExtension:ext];
+    STAssertNotNil(filePath, @"Could not copy file from bundle");
     
     TagReader *t = [[TagReader alloc] initWithFileAtPath:filePath];
     STAssertNotNil(t, @"(1) Returned a nil TagReader");
@@ -91,6 +101,8 @@
     STAssertEqualObjects(t.year, TEST_YEAR_2, @"Year not equal");
     STAssertEqualObjects(t.genre, TEST_GENRE_2, @"Genre not equal");
 }
+
+#pragma mark - Tests
 
 - (void)testMusepack
 {
@@ -145,6 +157,13 @@
 - (void)testAPE
 {
     [self saveTagReaderWithName:@"mac-399" extension:@"ape" doubleSave:YES];
+}
+
+- (void)testZeroLength
+{
+    NSString *filePath = [self copyFile:@"zero-size-chunk" fileExtension:@"wav"];
+    TagReader *tagReader = [[TagReader alloc] initWithFileAtPath:filePath];
+    STAssertNil(tagReader, @"Failed to handle zero-length audio file");
 }
 
 @end

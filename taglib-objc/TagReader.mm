@@ -42,17 +42,24 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (id)initWithFileAtPath:(NSString *)path
 {
+    BOOL fileLoaded = NO;
     if (self = [super init]) {
-        [self loadFileAtPath:path];
+        fileLoaded = [self loadFileAtPath:path];
     }
-    return self;
+    
+    if (fileLoaded) {
+        return self;
+    }
+    
+    return nil;
 }
+
 - (id)init
 {
     return [self initWithFileAtPath:nil];
 }
 
-- (void)loadFileAtPath:(NSString *)path
+- (BOOL)loadFileAtPath:(NSString *)path
 {
     _path = path;
     
@@ -61,6 +68,12 @@ static inline TagLib::String TLStr(NSString *_string)
     } else {
         _file = FileRef();
     }
+    
+    if (_file.isNull()) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL)save
